@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Voice Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .result {
+            display: none;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .analysis {
+            margin-top: 20px;
+        }
+
+        .analysis-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .analysis-item.correct {
+            border-left-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .analysis-item.incorrect {
+            border-left-color: #e74c3c;
+            background: #fdeaea;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .student-info {
+            background: #e8f4fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fdeaea;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+            
+            .option {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Passive Voice Test</h1>
+            <p>Test your knowledge of passive voice across 8 tenses and modal verbs</p>
+        </div>
+        
+        <div class="content">
+            <div id="studentForm">
+                <div class="form-group">
+                    <label for="studentName">Enter your name:</label>
+                    <input type="text" id="studentName" placeholder="Your full name" required>
+                </div>
+                <button class="btn" onclick="startTest()">Start Test</button>
+            </div>
+
+            <form id="testForm" style="display: none;">
+                <div id="questionsContainer"></div>
+                <button type="submit" class="btn">Submit Test</button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Submitting your test results...</p>
+            </div>
+
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. English ________ all over the world.",
+                options: ["speaks", "is spoken", "is spoke"],
+                correct: 1,
+                tense: "Present Simple"
+            },
+            {
+                question: "2. This beautiful necklace ________ in a small shop in Paris.",
+                options: ["was bought", "is bought", "bought"],
+                correct: 0,
+                tense: "Past Simple"
+            },
+            {
+                question: "3. The office ________ every evening.",
+                options: ["is cleaned", "cleaned", "cleans"],
+                correct: 0,
+                tense: "Present Simple"
+            },
+            {
+                question: "4. The new bridge ________ last year.",
+                options: ["is built", "was build", "was built"],
+                correct: 2,
+                tense: "Past Simple"
+            },
+            {
+                question: "5. Coffee ________ in hot countries.",
+                options: ["is grown", "grows", "is grew"],
+                correct: 0,
+                tense: "Present Simple"
+            },
+            {
+                question: "6. I can't use my desk because it ________ right now.",
+                options: ["is being repaired", "is repairing", "repairs"],
+                correct: 0,
+                tense: "Present Continuous"
+            },
+            {
+                question: "7. When we arrived at the hotel, our room ________.",
+                options: ["was being prepared", "was preparing", "prepared"],
+                correct: 0,
+                tense: "Past Continuous"
+            },
+            {
+                question: "8. I can't find my keys. They ________.",
+                options: ["have been stolen", "have stolen", "stole"],
+                correct: 0,
+                tense: "Present Perfect"
+            },
+            {
+                question: "9. The invitations ________ yet.",
+                options: ["haven't been sent", "haven't sent", "weren't sent"],
+                correct: 0,
+                tense: "Present Perfect"
+            },
+            {
+                question: "10. The results ________ on Friday.",
+                options: ["will be announce", "will announced", "will be announced"],
+                correct: 2,
+                tense: "Future Simple"
+            },
+            {
+                question: "11. By the time we get there, all the food ________.",
+                options: ["will have been eaten", "will have eaten", "will be eating"],
+                correct: 0,
+                tense: "Future Perfect"
+            },
+            {
+                question: "12. A new shopping mall ________ in the city center soon.",
+                options: ["will be built", "will build", "is built"],
+                correct: 0,
+                tense: "Future Simple"
+            },
+            {
+                question: "13. The windows are very dirty. They ________.",
+                options: ["should be cleaned", "should clean", "should been cleaned"],
+                correct: 0,
+                tense: "Modal - should"
+            },
+            {
+                question: "14. This meat ________ in the fridge; it will go bad.",
+                options: ["must be kept", "must keep", "must be keep"],
+                correct: 0,
+                tense: "Modal - must"
+            },
+            {
+                question: "15. Mobile phones ________ during the exam.",
+                options: ["cannot be used", "cannot use", "cannot been used"],
+                correct: 0,
+                tense: "Modal - can/cannot"
+            },
+            {
+                question: "16. The project ________ by the end of next week.",
+                options: ["can be finished", "can finish", "can been finished"],
+                correct: 0,
+                tense: "Modal - can"
+            },
+            {
+                question: "17. To make an omelette, eggs ________ first.",
+                options: ["must be broken", "must break", "must have broken"],
+                correct: 0,
+                tense: "Modal - must"
+            },
+            {
+                question: "18. My car ________ yesterday, but the mechanic fixed it.",
+                options: ["was repaired", "was being repaired", "is repaired"],
+                correct: 1,
+                tense: "Past Continuous"
+            },
+            {
+                question: "19. Right now, a new vaccine ________ by scientists.",
+                options: ["is developed", "is being developed", "develops"],
+                correct: 1,
+                tense: "Present Continuous"
+            },
+            {
+                question: "20. This book ________ by millions of people.",
+                options: ["has been read", "has read", "was read"],
+                correct: 0,
+                tense: "Present Perfect"
+            },
+            {
+                question: "21. The decision ________ until next month.",
+                options: ["won't be made", "isn't made", "hasn't been made"],
+                correct: 0,
+                tense: "Future Simple"
+            },
+            {
+                question: "22. The secret documents ________ from the safe!",
+                options: ["have been taken", "have taken", "were took"],
+                correct: 0,
+                tense: "Present Perfect"
+            },
+            {
+                question: "23. When ________ the telephone ________?",
+                options: ["was / invented", "did / invented", "is / invented"],
+                correct: 0,
+                tense: "Past Simple"
+            },
+            {
+                question: "24. The children ________ to the zoo by their parents next Sunday.",
+                options: ["will be taken", "will take", "are taken"],
+                correct: 0,
+                tense: "Future Simple"
+            },
+            {
+                question: "25. This form ________ in blue or black ink.",
+                options: ["must be completed", "must complete", "must be complete"],
+                correct: 0,
+                tense: "Modal - must"
+            }
+        ];
+
+        let studentName = '';
+
+        function startTest() {
+            const nameInput = document.getElementById('studentName');
+            studentName = nameInput.value.trim();
+            
+            if (!studentName) {
+                alert('Please enter your name before starting the test.');
+                return;
+            }
+
+            document.getElementById('studentForm').style.display = 'none';
+            document.getElementById('testForm').style.display = 'block';
+
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option">
+                                <input type="radio" name="q${index}" value="${optIndex}" required>
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitTest();
+        });
+
+        async function submitTest() {
+            const answers = [];
+            let score = 0;
+
+            // Show loading
+            document.getElementById('testForm').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            // Calculate score and gather answers
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const answerIndex = selected ? parseInt(selected.value) : -1;
+                const isCorrect = answerIndex === q.correct;
+                
+                if (isCorrect) score++;
+                
+                answers.push({
+                    question: q.question,
+                    selected: answerIndex !== -1 ? q.options[answerIndex] : 'Not answered',
+                    correct: q.options[q.correct],
+                    isCorrect: isCorrect,
+                    tense: q.tense
+                });
+            });
+
+            try {
+                await sendToTelegram(studentName, score, answers);
+                displayResults(score, answers, true);
+            } catch (error) {
+                console.error('Failed to send to Telegram:', error);
+                displayResults(score, answers, false);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function displayResults(score, answers, telegramSuccess = true) {
+            const resultDiv = document.getElementById('result');
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            let html = `
+                <div class="student-info">
+                    <h2>Test Results for ${studentName}</h2>
+                    ${!telegramSuccess ? '<div class="error">Note: Results could not be sent to teacher (Telegram error)</div>' : ''}
+                </div>
+                <div class="score">Score: ${score}/${questions.length} (${percentage}%)</div>
+                <div class="analysis">
+            `;
+
+            answers.forEach((answer, index) => {
+                const statusClass = answer.isCorrect ? 'correct' : 'incorrect';
+                const statusText = answer.isCorrect ? '✓ Correct' : '✗ Incorrect';
+                
+                html += `
+                    <div class="analysis-item ${statusClass}">
+                        <div class="question-number">Question ${index + 1} (${answer.tense}) - ${statusText}</div>
+                        <div><strong>Your answer:</strong> ${answer.selected}</div>
+                        <div><strong>Correct answer:</strong> ${answer.correct}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+                <button class="btn btn-secondary" onclick="location.reload()" style="margin-top: 20px;">Take Test Again</button>
+            `;
+            
+            resultDiv.innerHTML = html;
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function sendToTelegram(name, score, answers) {
+            // Format message for Telegram
+            let message = `📝 *New Test Submission*\n\n`;
+            message += `*Student:* ${name}\n`;
+            message += `*Score:* ${score}/${questions.length} (${((score/questions.length)*100).toFixed(1)}%)\n\n`;
+            message += `*Detailed Results:*\n\n`;
+
+            answers.forEach((answer, index) => {
+                const status = answer.isCorrect ? '✅' : '❌';
+                message += `${status} *Q${index + 1}:* ${answer.tense}\n`;
+                message += `   Student: ${answer.selected}\n`;
+                message += `   Correct: ${answer.correct}\n\n`;
+            });
+
+            const response = await fetch('/api/telegram', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    studentName: name,
+                    score: score,
+                    total: questions.length,
+                    message: message,
+                    answers: answers
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to send to Telegram');
+            }
+
+            return result;
+        }
+    </script>
+</body>
+</html>
