@@ -1,0 +1,10 @@
+{
+  "name": "passive-voice-test",
+  "version": "1.0.0",
+  "description": "Passive Voice Test with Telegram Reporting",
+  "type": "module",
+  "dependencies": {},
+  "engines": {
+    "node": "22.x"
+  }
+}
