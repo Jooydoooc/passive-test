@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "functions": {
+    "api/telegram.js": {
+      "includeFiles": "**/*"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/telegram",
+      "dest": "/api/telegram.js",
+      "methods": ["POST", "GET"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+}
